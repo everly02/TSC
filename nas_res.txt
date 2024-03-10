@@ -1,0 +1,136 @@
+
+Epoch 1/10
+308/308 [==============================] - 2s 3ms/step - loss: 0.1021 - accuracy: 0.8460 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 2/10
+308/308 [==============================] - 0s 2ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 3/10
+308/308 [==============================] - 0s 2ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 4/10
+308/308 [==============================] - 0s 1ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 5/10
+308/308 [==============================] - 0s 2ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 6/10
+308/308 [==============================] - 0s 2ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 7/10
+308/308 [==============================] - 0s 2ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 8/10
+308/308 [==============================] - 0s 1ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 9/10
+308/308 [==============================] - 0s 1ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+Epoch 10/10
+308/308 [==============================] - 0s 2ms/step - loss: 0.1016 - accuracy: 0.8476 - val_loss: 0.1082 - val_accuracy: 0.8377
+
+Trial 150 Complete [00h 00m 06s]
+val_loss: 0.10822509229183197
+
+Best val_loss So Far: 0.09046828001737595
+Total elapsed time: 18h 58m 39s
+WARNING:tensorflow:From c:\Users\Eliezer\CODE\ML_prjs\traffic_severity_classifier\.conda\Lib\site-packages\keras\src\saving\legacy\save.py:538: The name tf.train.NewCheckpointReader is deprecated. Please use tf.compat.v1.train.NewCheckpointReader instead.
+
+Results summary
+Results in .\untitled_project
+Showing 10 best trials
+Objective(name="val_loss", direction="min")
+
+Trial 064 summary
+Hyperparameters:
+num_layers: 2
+units_0: 16
+activation: relu
+lr: 0.008643283529327183
+units_1: 240
+units_2: 48
+Score: 0.09046828001737595
+
+Trial 31 summary
+Hyperparameters:
+num_layers: 3
+units_0: 144
+activation: tanh
+lr: 0.006477688511032843
+units_1: 176
+units_2: 64
+Score: 0.09053276479244232
+
+Trial 36 summary
+Hyperparameters:
+num_layers: 3
+units_0: 224
+activation: tanh
+lr: 0.006260394309305727
+units_1: 144
+units_2: 64
+Score: 0.09055749326944351
+
+Trial 13 summary
+Hyperparameters:
+num_layers: 1
+units_0: 16
+activation: relu
+lr: 0.01976532602511614
+units_1: 192
+units_2: 32
+Score: 0.09065529704093933
+
+Trial 23 summary
+Hyperparameters:
+num_layers: 2
+units_0: 176
+activation: relu
+lr: 0.00847942324452658
+units_1: 64
+units_2: 208
+Score: 0.09071404486894608
+
+Trial 115 summary
+Hyperparameters:
+num_layers: 3
+units_0: 48
+activation: relu
+lr: 0.009815184917622717
+units_1: 144
+units_2: 48
+Score: 0.0907168984413147
+
+Trial 087 summary
+Hyperparameters:
+num_layers: 3
+units_0: 112
+activation: relu
+lr: 0.006846592383220622
+units_1: 224
+units_2: 16
+Score: 0.09074249863624573
+
+Trial 138 summary
+Hyperparameters:
+num_layers: 1
+units_0: 48
+activation: relu
+lr: 0.005174112333825737
+units_1: 112
+units_2: 240
+Score: 0.09074530005455017
+
+Trial 095 summary
+Hyperparameters:
+num_layers: 1
+units_0: 16
+activation: relu
+lr: 0.01795285312791276
+units_1: 128
+units_2: 240
+Score: 0.09076224267482758
+
+Trial 116 summary
+Hyperparameters:
+num_layers: 1
+units_0: 32
+activation: relu
+lr: 0.012036034084531076
+units_1: 32
+units_2: 80
+Score: 0.0908348560333252
+WARNING:tensorflow:Detecting that an object or model or tf.train.Checkpoint is being deleted with unrestored values. See the following logs for the specific values in question. To silence these warnings, use `status.expect_partial()`. See https://www.tensorflow.org/api_docs/python/tf/train/Checkpoint#restorefor details about the status object returned by the restore function.
+WARNING:tensorflow:Value in checkpoint could not be found in the restored object: (root).layer_with_weights-0.kernel
+WARNING:tensorflow:Value in checkpoint could not be found in the restored object: (root).layer_with_weights-0.bias

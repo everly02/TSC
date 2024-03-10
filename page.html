@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>车祸损伤程度预测器</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background: url('./pic/1090359.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+    form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.5); /* 半透明背景 */
+        backdrop-filter: blur(10px); /* 模糊效果 */
+        border-radius: 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        width: 80%;
+        max-width: 600px; /* 限制最大宽度 */
+        max-height: 90vh; /* 限制最大高度，保持在视口的90%以内 */
+        overflow-y: auto; /* 当内容超出最大高度时显示滚动条 */
+    }
+    
+    .form-group {
+        width: 40%;
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        
+    }
+    label {
+        margin-bottom: 5px;
+        font-weight: bold;
+
+    }
+    input{
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 70%;
+        align-self: center;
+    }
+    select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        width: 80%;
+        align-self: center;
+    }
+    .submit-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        background-color: #007bff;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        width: 40%;
+    }
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+    
+</style>
+</head>
+<body>
+
+<form action="http://127.0.0.1:5000/submit-form" id="predictionForm" method="POST">
+    <!-- 循环创建30个下拉菜单，每个都有对应的label -->
+    <!-- 示例下拉菜单 -->
+    <!-- 请将下面的示例复制到30次，并根据需要更改id、for和name属性 -->
+    <div class="form-group">
+        <label >事故时间</label>
+        <input type="time" id="input" name="Time" required>
+    </div>
+        
+    <div class="form-group">
+        <label >事故发生在星期几</label>
+        <select id="dropdown1" name="Day_of_week">
+            <option value="">请选择</option>
+            <option value="Monday">星期一</option>  
+            <option value="Tuesday">星期二</option>  
+            <option value="Wednesday">星期三</option>  
+            <option value="Thursday">星期四</option>
+            <option value="Friday">星期五</option>
+            <option value="Saturday">星期六</option>
+            <option value="Sunday">星期日</option> 
+        </select>
+    </div>
+    <div class="form-group">
+        <label >年龄区间</label>
+        <select id="dropdown1" name="Age_band_of_driver">
+            <option value="">请选择</option>  
+            <option value="Under 18">18以下</option>
+            <option value="18-30">18-30</option>
+            <option value="31-50">31-50</option>
+            <option value="Over 51">51以上</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label >性别</label>
+        <select id="dropdown1" name="Sex_of_driver">
+            <option value="">请选择</option>  
+            <option value="Female">女</option>
+            <option value="Male">男</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label >受教育水平</label>
+        <select id="dropdown1" name="Educational_level">
+            <option value="">请选择</option>  
+            <option value="Writing & reading">仅会读写</option>
+            <option value="Elementary school">小学</option>
+            <option value="Junior high school">初中</option>
+            <option value="High school">高中</option>
+            <option value="Above high school">高中以上</option>
+            <option value="Illiterate">文盲</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label >车辆与驾驶者关系</label>
+        <select id="dropdown1" name="Vehicle_driver_relation">
+            <option value="">请选择</option>  
+            <option value="Owner">拥有</option>
+            <option value="Employee">借用</option>
+            <option value="Other">其他</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label >驾龄</label>
+        <select id="dropdown1" name="Driving_experience">
+            <option value="">请选择</option>
+            <option value="No License">无照驾驶</option>  
+            <option value="Below 1yr">1年以下</option>
+            <option value="1-2yr">1-2年</option>
+            <option value="2-5yr">2-5年</option>
+            <option value="5-10yr">5-10年</option>
+            <option value="Above 10yr">10年以上</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label >车辆类型</label>
+        <select id="dropdown1" name="Type_of_Vehicle">
+            <option value="">请选择</option>  
+            <option value="Taxi">的士</option>
+            <option value="Stationwagen">公共汽车</option>
+            <option value="Motorcycle">摩托车</option>
+            <option value="Special Vehicle">特殊车辆</option>
+            <option value="Public">客车</option>
+            <option value="Lorry (11?40Q)">重型货车</option>
+            <option value="Lorry (41?100Q)">超重型货车</option>
+            <option value="Bicycle">自行车</option>
+            <option value="Other">其他</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label >车辆的拥有者</label>
+        <select id="dropdown1" name="Owner_of_vechile">
+            <option value="">请选择</option>  
+            <option value="Government">政府</option>
+            <option value="Orgnization">机构</option>
+            <option value="Owner">拥有者</option>
+            <option value="Other">其他</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>车辆使用年数</label>
+        <select id="dropdown1" name="Service_year_of_vehicle">
+            <option value="">请选择</option>
+            <option value="1-2yr">1-2年</option>
+            <option value="2-5yrs">2-5年</option>
+            <option value="Unknown">未知</option>
+            <option value="5-10yrs">5-10年</option>
+            <option value="Above 10yr">超过10年</option>
+            <option value="Below 1yr">不足1年</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>车辆缺陷</label>
+        <select id="dropdown1" name="Defect_of_vehicle">
+            <option value="">请选择</option>
+            <option value="No defect">无缺陷</option>
+            <option value="7">7</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>事故发生区域</label>
+        <select id="dropdown1" name="Area_accident_occured">
+            <option value="">请选择</option>
+            <option value="Recreational areas">娱乐区域</option>
+            <option value="Outside rural areas">农村外区域</option>
+            <option value="School areas">学校区域</option>
+            <option value="Industrial areas">工业区域</option>
+            <option value="Rural village areas">农村区域</option>
+            <option value="Unknown">未知</option>
+            <option value="Church areas">教堂区域</option>
+            <option value="Office areas">办公区域</option>
+            <option value="Residential areas">居住区</option>
+            <option value="Market areas">市场区域</option>
+            <option value="Hospital areas">医院区域</option>
+            <option value="Other">其他</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>车道或中央分隔带</label>
+        <select id="dropdown1" name="Lanes_or_Medians">
+            <option value="">请选择</option>
+            <option value="Two-way (divided with broken lines road marking)">双向（以虚线标记分隔）</option>
+            <option value="Undivided Two way">未分隔的双向</option>
+            <option value="One way">单向</option>
+            <option value="Unknown">未知</option>
+            <option value="Two-way (divided with solid lines road marking)">双向（以实线标记分隔）</option>
+            <option value="Double carriageway (median)">双车道（中央分隔带）</option>
+            <option value="other">其他</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>道路对齐</label>
+        <select id="dropdown1" name="Road_allignment">
+            <option value="">请选择</option>
+            <option value="Tangent road with flat terrain">平坦地形的直道</option>
+            <option value="Steep grade downward with mountainous terrain">山区陡坡下行</option>
+            <option value="Gentle horizontal curve">平缓水平曲线</option>
+            <option value="Escarpments">悬崖</option>
+            <option value="Steep grade upward with mountainous terrain">山区陡坡上行</option>
+            <option value="Sharp reverse curve">急转弯</option>
+            <option value="Tangent road with rolling terrain">起伏地形的直道</option>
+            <option value="Tangent road with mild grade and flat terrain">缓坡平地直道</option>
+            <option value="Tangent road with mountainous terrain and">山区直道</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>交叉类型</label>
+        <select id="dropdown1" name="Types_of_Junction">
+            <option value="">请选择</option>
+            <option value="No junction">无交叉</option>
+            <option value="Crossing">交叉口</option>
+            <option value="Unknown">未知</option>
+            <option value="Y Shape">Y型</option>
+            <option value="X Shape">X型</option>
+            <option value="T Shape">T型</option>
+            <option value="O Shape">O型</option>
+            <option value="Other">其他</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>路面类型</label>
+        <select id="dropdown1" name="Road_surface_type">
+          <option value="">请选择</option>
+          <option value="Gravel roads">砾石路</option>
+          <option value="Asphalt roads">沥青路</option>
+          <option value="Earth roads">土路</option>
+          <option value="Other">其他</option>
+          <option value="Asphalt roads with some distress">沥青路面出现损坏</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>路面状况</label>
+        <select id="dropdown1" name="Road_surface_conditions">
+          <option value="">请选择</option>
+          <option value="Flood over 3cm. deep">积水超过3厘米</option>
+          <option value="Snow">雪</option>
+          <option value="Dry">干燥</option>
+          <option value="Wet or damp">潮湿</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>光线条件</label>
+        <select id="dropdown1" name="Light_conditions">
+          <option value="">请选择</option>
+          <option value="Darkness - lights lit">黑暗 - 开灯</option>
+          <option value="Daylight">白天</option>
+          <option value="Darkness - no lighting">黑暗 - 无灯</option>
+          <option value="Darkness - lights unlit">黑暗 - 灯未点亮</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>天气状况</label>
+        <select id="dropdown1" name="Weather_conditions">
+          <option value="">请选择</option>
+          <option value="Cloudy">多云</option>
+          <option value="Raining">下雨</option>
+          <option value="Fog or mist">雾</option>
+          <option value="Unknown">未知</option>
+          <option value="Raining and Windy">雨雪风大</option>
+          <option value="Snow">雪</option>
+          <option value="Other">其他</option>
+          <option value="Normal">正常</option>
+          <option value="Windy">风大</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>事故类型</label>
+        <select id="dropdown1" name="Type_of_collision">
+          <option value="">请选择</option>
+          <option value="Vehicle with vehicle collision">车辆与车辆相撞</option>
+          <option value="Collision with animals">动物碰撞</option>
+          <option value="Collision with pedestrians">行人碰撞</option>
+          <option value="Fall from vehicles">从车辆中摔落</option>
+          <option value="Collision with roadside-parked vehicles">与路边停放车辆相撞</option>
+          <option value="With Train">与火车相撞</option>
+          <option value="Unknown">未知</option>
+          <option value="Rollover">翻车</option>
+          <option value="Collision with roadside objects">与路边物体相撞</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>涉事车辆数量</label>
+        <input type="number" id="num0" name="Number_of_vehicles_involved">
+        <script>
+            const numInput = document.getElementById('num0');
+
+            numInput.addEventListener('input', () => {
+            if (numInput.value > 100) {
+                numInput.value = 100;
+            }
+            else if (numInput.value < 0) {
+                numInput.value = 0;
+            }
+            });
+        </script>
+
+    </div>
+    <div class="form-group">
+        <label>受伤人数</label>
+        <input type="number" id="num" name="Number_of_casualties">
+        <script>
+            const numInput1 = document.getElementById('num');
+            numInput1.addEventListener('input', () => {
+            if (numInput1.value > 100 ) {
+                numInput1.value = 100;
+            }
+            else if (numInput1.value < 0) {
+                numInput1.value = 0;
+            }
+            });
+        </script>
+    </div>
+    <div class="form-group">
+        <label>车辆行动</label>
+        <select id="dropdown1" name="Vehicle_movement">
+            <option value="">请选择</option>
+            <option value="Stopping">停车</option>
+            <option value="Entering a junction">进入交叉口</option>
+            <option value="Moving Backward">倒车</option>
+            <option value="Getting off">下车</option>
+            <option value="Waiting to go">等待前行</option>
+            <option value="Unknown">未知</option>
+            <option value="Overtaking">超车</option>
+            <option value="Reversing">反转</option>
+            <option value="U-Turn">掉头</option>
+            <option value="Going straight">直行</option>
+            <option value="Other">其他</option>
+            <option value="Turnover">翻车</option>
+            <option value="Parked">停放</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>行人行动</label>
+        <select id="dropdown1" name="Pedestrian_movement">
+            <option value="">请选择</option>
+            <option value="Unknown or other">未知或其他</option>
+            <option value="Not a Pedestrian">非行人</option>
+            <option value="Walking along in carriageway, back to traffic">在车道上沿交通方向行走</option>
+            <option value="Walking along in carriageway, facing traffic">在车道上面向交通行走</option>
+            <option value="In carriageway, stationary - not crossing (standing or playing) - masked by parked or stationary vehicle">在车道上静止-不过马路（站立或玩耍）-被停放的或静止的车辆遮挡</option>
+            <option value="In carriageway, stationary - not crossing (standing or playing)">在车道上静止-不过马路（站立或玩耍）</option>
+            <option value="Crossing from nearside - masked by parked or stationary vehicle">从近侧过马路-被停放的或静止的车辆遮挡</option>
+            <option value="Crossing from driver's nearside">从驾驶员近侧过马路</option>
+            <option value="Crossing from offside - masked by parked or stationary vehicle">从远侧过马路-被停放的或静止的车辆遮挡</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>伤者类型</label>
+        <select id="dropdown1" name="Casualty_class">
+          <option value="">请选择</option>
+          <option value="Passenger">乘客</option>
+          <option value="Pedestrian">行人</option>
+          <option value="Driver or rider">驾驶员或骑行者</option>
+        </select>
+      </div>
+
+    <div class="form-group">
+    <label>伤者性别</label>
+        <select id="dropdown1" name="Sex_of_casualty">
+            <option value="">请选择</option>
+            <option value="Female">女性</option>
+            <option value="Male">男性</option>
+        </select>
+    </div>
+      
+    <div class="form-group">
+        <label>人员年龄段</label>
+        <select id="dropdown1" name="Age_band_of_casualty">
+          <option value="">请选择</option>
+          <option value="Under 18">18岁以下</option>
+          <option value="18-30">18-30岁</option>
+          <option value="31-50">31-50岁</option>
+          <option value="Over 51">51岁以上</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>人员伤势严重程度</label>
+        <select id="dropdown1" name="Casualty_severity">
+          <option value="">请选择</option>
+          <option value="1">轻伤</option>
+          <option value="2">重伤</option>
+          <option value="3">死亡</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>伤者职业</label>
+        <select id="dropdown1" name="Work_of_casuality">
+          <option value="">请选择</option>
+          <option value="Driver">驾驶员</option>
+          <option value="Student">学生</option>
+          <option value="Employee">雇员</option>
+          <option value="Self-employed">自雇人士</option>
+          <option value="Unemployed">无业人员</option>
+        </select>
+      </div>
+        
+      <div class="form-group">
+        <label>人员身体状况</label>
+        <select id="dropdown1" name="Fitness_of_casuality">
+          <option value="">请选择</option>
+          <option value="Normal">正常</option>
+          <option value="Blind">盲人</option>
+          <option value="Deaf">聋人</option>
+        </select>
+      </div>
+      
+
+    <div class="form-group">
+        <label>事故原因</label>
+        <select id="dropdown1" name="Cause_of_accident">
+            <option value="">请选择</option>
+            <option value="Moving Backward">倒车</option>
+            <option value="No distancing">未保持距离</option>
+            <option value="Changing lane to the left">向左变道</option>
+            <option value="Overturning">翻车</option>
+            <option value="Overspeed">超速</option>
+            <option value="Driving at high speed">高速驾驶</option>
+            <option value="Driving under the influence of drugs">吸毒驾驶</option>
+            <option value="Drunk driving">酒驾</option>
+            <option value="Getting off the vehicle improperly">不当下车</option>
+            <option value="Driving to the left">向左驾驶</option>
+            <option value="Overloading">超载</option>
+            <option value="No priority to vehicle">未让车</option>
+            <option value="No priority to pedestrian">未让行人</option>
+            <option value="Overtaking">超车</option>
+            <option value="Changing lane to the right">向右变道</option>
+            <option value="Unknown">未知</option>
+            <option value="Turnover">翻转</option>
+            <option value="Driving carelessly">驾驶粗心</option>
+            <option value="Improper parking">不正确停车</option>
+            <option value="Other">其他</option>
+        </select>
+    </div>
+    <!-- 提交按钮 -->
+    
+    <button class="submit-btn" type="submit">提交</button>
+</form>
+<div id="predictionResult"></div>
+
+<script>
+document.getElementById('predictionForm').onsubmit = function(e){
+    e.preventDefault(); // 阻止表单默认提交行为
+
+    // 使用FormData收集表单数据
+    let formData = new FormData(e.target);
+    let dataObj = {};
+    formData.forEach((value, key) => { dataObj[key] = value; });
+    // 发送AJAX请求到服务器
+    fetch('/submit-form', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataObj), // 将数据对象转换为JSON字符串
+    })
+    .then(response => response.json()) // 返回JSON格式的响应
+    .then(data => {
+        
+        document.getElementById('predictionResult').textContent = '预测: ' + data.prediction;
+    })
+    .catch(error => console.error('Error:', error));
+};
+</script>
+</form>   
+ 
+</body>
+</html>
